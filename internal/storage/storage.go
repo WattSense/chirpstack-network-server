@@ -58,7 +58,9 @@ func Setup(c config.Config) error {
 	}
 
 	log.Info("storage: connecting to PostgreSQL")
-	d, err := sqlx.Open("postgres", c.PostgreSQL.DSN)
+	// d, err := sqlx.Open("postgres", c.PostgreSQL.DSN)
+	// d, err := sqlx.Connect("sqlite3", "__deleteme.db?parseTime=true")
+	d, err := sqlx.Connect("sqlite3", "__deleteme.db?parseTime=true")
 	if err != nil {
 		return errors.Wrap(err, "storage: PostgreSQL connection error")
 	}
@@ -82,7 +84,7 @@ func Setup(c config.Config) error {
 			AssetDir: migrations.AssetDir,
 			Dir:      "",
 		}
-		n, err := migrate.Exec(db.DB.DB, "postgres", m, migrate.Up)
+		n, err := migrate.Exec(db.DB.DB, "sqlite3", m, migrate.Up)
 		if err != nil {
 			return errors.Wrap(err, "storage: applying PostgreSQL data migrations error")
 		}

@@ -5,7 +5,8 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"github.com/pkg/errors"
+
+	//"github.com/lib/pq"
 
 	"github.com/brocaar/chirpstack-network-server/internal/storage"
 )
@@ -14,10 +15,10 @@ import (
 // it will execute the given function.
 func Migrate(name string, f func(db sqlx.Ext) error) error {
 	return storage.Transaction(func(tx sqlx.Ext) error {
-		_, err := tx.Exec(`lock table code_migration`)
-		if err != nil {
-			return errors.Wrap(err, "lock code migration table error")
-		}
+		// _, err := tx.Exec(`begin table code_migration`)
+		// if err != nil {
+		// 	return errors.Wrap(err, "lock code migration table error")
+		// }
 
 		res, err := tx.Exec(`
 			insert into code_migration (

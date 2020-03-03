@@ -8,7 +8,8 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	// register postgresql driver
-	_ "github.com/lib/pq"
+	// _ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 	log "github.com/sirupsen/logrus"
 )
 

@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -339,18 +340,18 @@ func GetMulticastQueueItemsForMulticastGroup(ctx context.Context, db sqlx.Querye
 // be executed in parallel.
 func GetSchedulableMulticastQueueItems(ctx context.Context, db sqlx.Ext, count int) ([]MulticastQueueItem, error) {
 	var items []MulticastQueueItem
+	fmt.Println("count")
 	err := sqlx.Select(db, &items, `
 		select
 			*
 		from
 			multicast_queue
 		where
-			schedule_at <= $2
+			schedule_at <= time('now')
 		order by
 			id
 		limit $1
-		for update skip locked
-	`, count, time.Now())
+	`, count)
 	if err != nil {
 		return nil, handlePSQLError(err, "select error")
 	}

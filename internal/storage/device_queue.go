@@ -421,15 +421,13 @@ func GetDevicesWithClassBOrClassCDeviceQueueItems(ctx context.Context, db sqlx.E
                 where
                     dq.dev_eui = d.dev_eui
                     and is_pending = true
-                    and dq.timeout_after > $3 
+                    and dq.timeout_after > time('now')
             )
         order by
             d.dev_eui
-        limit $1
-        for update of d skip locked`,
+        limit $1`,
 		count,
 		gpsEpochScheduleTime,
-		time.Now(),
 	)
 	if err != nil {
 		return nil, handlePSQLError(err, "select error")

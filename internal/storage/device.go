@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -103,18 +104,18 @@ func GetDevice(ctx context.Context, db sqlx.Queryer, devEUI lorawan.EUI64) (Devi
 // UpdateDevice updates the given device.
 func UpdateDevice(ctx context.Context, db sqlx.Execer, d *Device) error {
 	d.UpdatedAt = time.Now()
-	res, err := db.Exec(`
-		update device set
-			updated_at = $2,
-			device_profile_id = $3,
-			service_profile_id = $4,
-			routing_profile_id = $5,
-			skip_fcnt_check = $6,
-			reference_altitude = $7,
-			mode = $8
-		where
-			dev_eui = $1`,
-		d.DevEUI[:],
+	var req string = fmt.Sprintf(`
+	update device set
+		updated_at = $1,
+		device_profile_id = $2,
+		service_profile_id = $3,
+		routing_profile_id = $4,
+		skip_fcnt_check = $5,
+		reference_altitude = $6,
+		mode = $7
+	where
+		dev_eui = x'%s'`, d.DevEUI)
+	res, err := db.Exec(req,
 		d.UpdatedAt,
 		d.DeviceProfileID,
 		d.ServiceProfileID,

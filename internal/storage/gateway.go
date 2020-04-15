@@ -38,13 +38,26 @@ func (l GPSPoint) Value() (driver.Value, error) {
 
 // Scan implements the sql.Scanner interface.
 func (l *GPSPoint) Scan(src interface{}) error {
-	b, ok := src.([]byte)
-	if !ok {
-		return fmt.Errorf("expected []byte, got %T", src)
+
+	switch src.(type) {
+	case string:
+		b, ok := src.(string)
+		if !ok {
+			return fmt.Errorf("expected string, got %T", src)
+		}
+		_, err := fmt.Sscanf(string(b), "(%f,%f)", &l.Latitude, &l.Longitude)
+		return err
+
+	default:
+		b, ok := src.([]byte)
+		if !ok {
+			return fmt.Errorf("expected []byte, got %T", src)
+		}
+
+		_, err := fmt.Sscanf(string(b), "(%f,%f)", &l.Latitude, &l.Longitude)
+		return err
 	}
 
-	_, err := fmt.Sscanf(string(b), "(%f,%f)", &l.Latitude, &l.Longitude)
-	return err
 }
 
 // Gateway represents a gateway.
@@ -220,24 +233,26 @@ func GetAndCacheGateway(ctx context.Context, db sqlx.Queryer, p *redis.Pool, gat
 // GetGateway returns the gateway for the given Gateway ID.
 func GetGateway(ctx context.Context, db sqlx.Queryer, id lorawan.EUI64) (Gateway, error) {
 	var gw Gateway
-	err := sqlx.Get(db, &gw, "select * from gateway where gateway_id = $1", id[:])
+	var req string = fmt.Sprintf("select * from gateway where gateway_id = x'%s'", id)
+	err := sqlx.Get(db, &gw, req)
 	if err != nil {
 		return gw, handlePSQLError(err, "select error")
 	}
 
-	err = sqlx.Select(db, &gw.Boards, `
-		select
-			fpga_id,
-			fine_timestamp_key
-		from
-			gateway_board
-		where
-			gateway_id = $1
-		order by
-			id
-		`,
-		id,
-	)
+	req = fmt.Sprintf(`
+	select
+		fpga_id,
+		fine_timestamp_key
+	from
+		gateway_board
+	where
+		gateway_id = %s
+	order by
+		id
+	`,
+		id)
+
+	err = sqlx.Select(db, &gw.Boards, req)
 	if err != nil {
 		return gw, handlePSQLError(err, "select error")
 	}

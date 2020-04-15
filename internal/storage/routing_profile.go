@@ -88,7 +88,7 @@ func CreateRoutingProfile(ctx context.Context, db sqlx.Execer, rp *RoutingProfil
 // GetRoutingProfile returns the routing-profile matching the given id.
 func GetRoutingProfile(ctx context.Context, db sqlx.Queryer, id uuid.UUID) (RoutingProfile, error) {
 	var rp RoutingProfile
-	err := sqlx.Get(db, &rp, "select * from routing_profile where routing_profile_id = $1", id)
+	err := sqlx.Get(db, &rp, "select * from routing_profile where routing_profile_id = \"$1\"", id)
 	if err != nil {
 		return rp, handlePSQLError(err, "select error")
 	}
@@ -107,7 +107,7 @@ func UpdateRoutingProfile(ctx context.Context, db sqlx.Execer, rp *RoutingProfil
 			tls_cert = $5,
 			tls_key = $6
 		where
-			routing_profile_id = $1`,
+			routing_profile_id = "$1"`,
 		rp.ID,
 		rp.UpdatedAt,
 		rp.ASID,
@@ -135,7 +135,7 @@ func UpdateRoutingProfile(ctx context.Context, db sqlx.Execer, rp *RoutingProfil
 
 // DeleteRoutingProfile deletes the routing-profile matching the given id.
 func DeleteRoutingProfile(ctx context.Context, db sqlx.Execer, id uuid.UUID) error {
-	res, err := db.Exec("delete from routing_profile where routing_profile_id = $1", id)
+	res, err := db.Exec("delete from routing_profile where routing_profile_id = \"$1\"", id)
 	if err != nil {
 		return handlePSQLError(err, "delete error")
 	}

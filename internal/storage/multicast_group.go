@@ -347,7 +347,7 @@ func GetSchedulableMulticastQueueItems(ctx context.Context, db sqlx.Ext, count i
 		from
 			multicast_queue
 		where
-			schedule_at <= time('now')
+			schedule_at <= datetime('now')
 		order by
 			id
 		limit $1

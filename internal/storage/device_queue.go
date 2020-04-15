@@ -421,7 +421,7 @@ func GetDevicesWithClassBOrClassCDeviceQueueItems(ctx context.Context, db sqlx.E
                 where
                     dq.dev_eui = d.dev_eui
                     and is_pending = true
-                    and dq.timeout_after > time('now')
+                    and dq.timeout_after > datetime('now')
             )
         order by
             d.dev_eui

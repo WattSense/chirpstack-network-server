@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/brocaar/chirpstack-api/go/v3/as"
@@ -88,7 +89,9 @@ func CreateRoutingProfile(ctx context.Context, db sqlx.Execer, rp *RoutingProfil
 // GetRoutingProfile returns the routing-profile matching the given id.
 func GetRoutingProfile(ctx context.Context, db sqlx.Queryer, id uuid.UUID) (RoutingProfile, error) {
 	var rp RoutingProfile
-	err := sqlx.Get(db, &rp, "select * from routing_profile where routing_profile_id = \"$1\"", id)
+	var req string
+	req = fmt.Sprintf("select * from routing_profile where routing_profile_id = '%s'", id)
+	err := sqlx.Get(db, &rp, req)
 	if err != nil {
 		return rp, handlePSQLError(err, "select error")
 	}

@@ -11,10 +11,7 @@ require (
 	github.com/brocaar/lorawan v0.0.0-20191115102621-6095d473cf60
 	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/elazarl/go-bindata-assetfs v1.0.0
-	github.com/go-sql-driver/mysql v1.5.0 // indirect
-	github.com/gobuffalo/buffalo-plugins v1.11.0 // indirect
-	github.com/gobuffalo/meta v0.0.0-20190120163247-50bbb1fa260d // indirect
-	github.com/gobuffalo/packr v1.30.1 // indirect
+	github.com/gobuffalo/packr v1.22.0 // indirect
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/golang/protobuf v1.3.3
 	github.com/gomodule/redigo v2.0.0+incompatible

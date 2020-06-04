@@ -194,30 +194,32 @@ func FlushDeviceProfileCache(ctx context.Context, p *redis.Pool, id uuid.UUID) e
 // in case available, else it will be retrieved from the database and then
 // stored in cache.
 func GetAndCacheDeviceProfile(ctx context.Context, db sqlx.Queryer, p *redis.Pool, id uuid.UUID) (DeviceProfile, error) {
-	dp, err := GetDeviceProfileCache(ctx, p, id)
-	if err == nil {
-		return dp, nil
-	}
+	var dp DeviceProfile
+	var err error
+	// dp, err := GetDeviceProfileCache(ctx, p, id)
+	// if err == nil {
+	// 	return dp, nil
+	// }
 
-	if err != ErrDoesNotExist {
-		log.WithFields(log.Fields{
-			"device_profile_id": id,
-		}).WithError(err).Error("get device-profile cache error")
-		// we don't return as we can still fall-back onto db retrieval
-	}
+	// if err != ErrDoesNotExist {
+	// 	log.WithFields(log.Fields{
+	// 		"device_profile_id": id,
+	// 	}).WithError(err).Error("get device-profile cache error")
+	// 	// we don't return as we can still fall-back onto db retrieval
+	// }
 
 	dp, err = GetDeviceProfile(ctx, db, id)
 	if err != nil {
 		return DeviceProfile{}, errors.Wrap(err, "get device-profile error")
 	}
 
-	err = CreateDeviceProfileCache(ctx, p, dp)
-	if err != nil {
-		log.WithFields(log.Fields{
-			"ctx_id":            ctx.Value(logging.ContextIDKey),
-			"device_profile_id": id,
-		}).WithError(err).Error("create device-profile cache error")
-	}
+	// err = CreateDeviceProfileCache(ctx, p, dp)
+	// if err != nil {
+	// 	log.WithFields(log.Fields{
+	// 		"ctx_id":            ctx.Value(logging.ContextIDKey),
+	// 		"device_profile_id": id,
+	// 	}).WithError(err).Error("create device-profile cache error")
+	// }
 
 	return dp, nil
 }

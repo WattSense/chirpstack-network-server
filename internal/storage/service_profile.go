@@ -197,31 +197,33 @@ func FlushServiceProfileCache(ctx context.Context, p *redis.Pool, id uuid.UUID) 
 // available, else it will be retrieved from the database and then stored
 // in cache.
 func GetAndCacheServiceProfile(ctx context.Context, db sqlx.Queryer, p *redis.Pool, id uuid.UUID) (ServiceProfile, error) {
-	sp, err := GetServiceProfileCache(ctx, p, id)
-	if err == nil {
-		return sp, nil
-	}
+	var sp ServiceProfile
+	var err error
+	// sp, err := GetServiceProfileCache(ctx, p, id)
+	// if err == nil {
+	// 	return sp, nil
+	// }
 
-	if err != ErrDoesNotExist {
-		log.WithFields(log.Fields{
-			"id":     id,
-			"ctx_id": ctx.Value(logging.ContextIDKey),
-		}).WithError(err).Error("get service-profile cache error")
-		// we don't return as we can fall-back onto db retrieval
-	}
+	// if err != ErrDoesNotExist {
+	// 	log.WithFields(log.Fields{
+	// 		"id":     id,
+	// 		"ctx_id": ctx.Value(logging.ContextIDKey),
+	// 	}).WithError(err).Error("get service-profile cache error")
+	// 	// we don't return as we can fall-back onto db retrieval
+	// }
 
 	sp, err = GetServiceProfile(ctx, db, id)
 	if err != nil {
 		return ServiceProfile{}, errors.Wrap(err, "get service-profile-error")
 	}
 
-	err = CreateServiceProfileCache(ctx, p, sp)
-	if err != nil {
-		log.WithFields(log.Fields{
-			"id":     id,
-			"ctx_id": ctx.Value(logging.ContextIDKey),
-		}).WithError(err).Error("create service-profile cache error")
-	}
+	// err = CreateServiceProfileCache(ctx, p, sp)
+	// if err != nil {
+	// 	log.WithFields(log.Fields{
+	// 		"id":     id,
+	// 		"ctx_id": ctx.Value(logging.ContextIDKey),
+	// 	}).WithError(err).Error("create service-profile cache error")
+	// }
 
 	return sp, nil
 }

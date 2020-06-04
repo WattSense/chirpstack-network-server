@@ -60,7 +60,7 @@ func Setup(c config.Config) error {
 	log.Info("storage: connecting to PostgreSQL")
 	// d, err := sqlx.Open("postgres", c.PostgreSQL.DSN)
 	// d, err := sqlx.Connect("sqlite3", "__deleteme.db?parseTime=true")
-	d, err := sqlx.Connect("sqlite3", "__deleteme.db?parseTime=true")
+	d, err := sqlx.Connect("sqlite3", "file::memory:?cache=shared")
 	// d, err := sqlx.Connect("sqlite3", "__deleteme.db?charset=utf8&parseTime=true")
 	if err != nil {
 		return errors.Wrap(err, "storage: PostgreSQL connection error")

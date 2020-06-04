@@ -69,11 +69,11 @@ func (s *Server) Start() error {
 		HandleUplinkFrames(&s.wg)
 	}()
 
-	go func() {
-		s.wg.Add(1)
-		defer s.wg.Done()
-		HandleDownlinkTXAcks(&s.wg)
-	}()
+	// go func() {
+	// 	s.wg.Add(1)
+	// 	defer s.wg.Done()
+	// 	HandleDownlinkTXAcks(&s.wg)
+	// }()
 	return nil
 }
 

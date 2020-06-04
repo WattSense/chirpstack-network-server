@@ -1,12 +1,17 @@
 package main
 
 import (
+	"flag"
+
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/resolver"
 
 	"github.com/brocaar/chirpstack-network-server/cmd/chirpstack-network-server/cmd"
 )
+
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
+var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
 
 // grpcLogger implements a wrapper around the logrus Logger to make it
 // compatible with the grpc LoggerV2. It seems that V is not (always)
@@ -60,5 +65,7 @@ func init() {
 var version string // set by the compiler
 
 func main() {
+	// profiling
+	// defer profile.Start().Stop()
 	cmd.Execute(version)
 }

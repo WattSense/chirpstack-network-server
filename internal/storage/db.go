@@ -9,8 +9,9 @@ import (
 
 	// register postgresql driver
 	// _ "github.com/lib/pq"
-	// _ "github.com/mattn/go-sqlite3"
-	_ "github.com/gwenn/gosqlite"
+	_ "github.com/mattn/go-sqlite3"
+	//_ "github.com/gwenn/gosqlite"
+	//_ "github.com/mxk/go-sqlite/sqlite3"
 	log "github.com/sirupsen/logrus"
 )
 

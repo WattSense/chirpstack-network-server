@@ -1,6 +1,6 @@
 module github.com/brocaar/chirpstack-network-server
 
-go 1.12
+go 1.13
 
 require (
 	cloud.google.com/go v0.44.3
@@ -20,7 +20,6 @@ require (
 	github.com/goreleaser/nfpm v0.11.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
-	github.com/gwenn/gosqlite v0.0.0-20200112083630-60b142bbd287
 	github.com/jacobsa/crypto v0.0.0-20190317225127-9f44e2d11115 // indirect
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/jteeuwen/go-bindata v3.0.7+incompatible
@@ -50,4 +49,5 @@ require (
 	google.golang.org/grpc v1.27.1
 	gopkg.in/gorp.v1 v1.7.2 // indirect
 	pack.ag/amqp v0.12.1
+	github.com/pkg/profile v1.4.0
 )
